@@ -10,6 +10,9 @@ public class ObjSightRange : MonoBehaviour
     private bool _tmpPrevCollision = false;                     // - //
     private List<Vector2> _sightLinePoints;                     // Крайние точки объектов видимости для данного объекта
     private RaycastHit2D _tmpRaycastHit, _tmpPrevRaycastHit;
+    public int viewAngle = 0;                                 //Угол поворота персонажа
+    public int maxPossibleAngle = 80;                           //Возможный угол обзора персонажа
+
     void Start()
     {
         objInSight = new List<GameObject>();
@@ -17,7 +20,9 @@ public class ObjSightRange : MonoBehaviour
     }
     void Update()
     {
-        for (int i = 0; i < 360; i+=2)
+        _tmpPrevCollision = false;
+
+        for (int i = viewAngle - maxPossibleAngle; i < viewAngle + maxPossibleAngle + 1; i += 1)
         {
             if (_tmpRaycastHit = Physics2D.Linecast(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100)) // Чтобы работало, нужно повесить на препятствие
             {
@@ -32,8 +37,11 @@ public class ObjSightRange : MonoBehaviour
                     Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100);
                     _tmpPrevCollision = false;
                 }
+                if (i == viewAngle - maxPossibleAngle || i == viewAngle + maxPossibleAngle)
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100, Color.magenta);
             }
         }
+        Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, viewAngle) * 100, Color.red);
     }
     public List<GameObject> GetSightObjects() // Получить все Объекты, которые видны данному
     {
