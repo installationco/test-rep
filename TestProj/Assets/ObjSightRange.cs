@@ -17,26 +17,23 @@ public class ObjSightRange : MonoBehaviour
     }
     void Update()
     {
-        for (int i = 0; i < 360; i++) // 360/1 = 360
+        for (int i = 0; i < 360; i+=2)
         {
-            if (_tmpRaycastHit = Physics2D.Linecast(new Vector2(0, 0), _tmpRotateVector)) // Чтобы работало, нужно повесить на препятствие
-            {                                                                             // коллайдер
+            if (_tmpRaycastHit = Physics2D.Linecast(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100)) // Чтобы работало, нужно повесить на препятствие
+            {
                 if (_tmpPrevCollision == false)
-                    _sightLinePoints.Add(_tmpRaycastHit.point);
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100);
                 _tmpPrevCollision = true;
-                _tmpPrevRaycastHit = _tmpRaycastHit;
             }
             else
             {
                 if (_tmpPrevCollision == true)
-                    _sightLinePoints.Add(_tmpPrevRaycastHit.point);
-                _tmpPrevCollision = false;
+                {
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100);
+                    _tmpPrevCollision = false;
+                }
             }
-            _tmpRotateVector = MathToolkit.RotateVectorbyAngle(_tmpRotateVector, 1); // Поворачиваем вектор на 1 градус
         }
-        foreach (Vector2 p in _sightLinePoints)             // Тестверсия, игрок по умолчанию стоит в (0,0)
-            Debug.DrawLine(new Vector3(0, 0, 0), p*100.0F); // Удлиняем, для наглядности
-        _sightLinePoints.Clear();
     }
     public List<GameObject> GetSightObjects() // Получить все Объекты, которые видны данному
     {
