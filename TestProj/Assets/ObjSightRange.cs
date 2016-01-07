@@ -12,6 +12,7 @@ public class ObjSightRange : MonoBehaviour
     private RaycastHit2D _tmpRaycastHit, _tmpPrevRaycastHit;
     public int viewAngle = 0;                                 //Угол поворота персонажа
     public int maxPossibleAngle = 80;                           //Возможный угол обзора персонажа
+    private const float _lengthMultiplier = 20;
 
     void Start()
     {
@@ -24,24 +25,24 @@ public class ObjSightRange : MonoBehaviour
 
         for (int i = viewAngle - maxPossibleAngle; i < viewAngle + maxPossibleAngle + 1; i += 1)
         {
-            if (_tmpRaycastHit = Physics2D.Linecast(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100)) // Чтобы работало, нужно повесить на препятствие
+            if (_tmpRaycastHit = Physics2D.Linecast(transform.position, MathToolkit.VectorbyPointAngle(transform.position, i, _lengthMultiplier))) // Чтобы работало, нужно повесить на препятствие
             {
                 if (_tmpPrevCollision == false)
-                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100);
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.position, i, _lengthMultiplier));
                 _tmpPrevCollision = true;
             }
             else
             {
                 if (_tmpPrevCollision == true)
                 {
-                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100);
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.position, i, _lengthMultiplier));
                     _tmpPrevCollision = false;
                 }
                 if (i == viewAngle - maxPossibleAngle || i == viewAngle + maxPossibleAngle)
-                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, i) * 100, Color.magenta);
+                    Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.position, i, _lengthMultiplier), Color.magenta);
             }
         }
-        Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.up, viewAngle) * 100, Color.red);
+        Debug.DrawLine(transform.position, MathToolkit.VectorbyPointAngle(transform.position, viewAngle, _lengthMultiplier), Color.red);
     }
     public List<GameObject> GetSightObjects() // Получить все Объекты, которые видны данному
     {
