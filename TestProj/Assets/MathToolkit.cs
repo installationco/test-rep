@@ -12,10 +12,9 @@ public class MathToolkit
         return new Vector2(vector.x * Mathf.Cos(Deg2Rad(angle)) - vector.y * Mathf.Sin(Deg2Rad(angle)),
                            vector.y * Mathf.Cos(Deg2Rad(angle)) + vector.x * Mathf.Sin(Deg2Rad(angle)));
     }
-    public static Vector2 VectorbyPointAngle(Vector2 point, float angle, float multiplier)
+    public static Vector2 VectorbyPointAngle(Vector2 point, float angle)
     {
-        Vector2 endpoint = new Vector2(point.x + Mathf.Cos(Deg2Rad(angle)) * multiplier, point.y + Mathf.Sin(Deg2Rad(angle)) * multiplier);
-        //return endpoint;
-        return endpoint;
+        Vector2 endpoint = new Vector2(point.x + Mathf.Cos(Deg2Rad(angle)), point.y + Mathf.Sin(Deg2Rad(angle)));
+        return new Vector2(endpoint.x - point.x, endpoint.y - point.y);
     }
 }
